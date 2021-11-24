@@ -174,21 +174,150 @@ function inc (arr, val) {
   }
   return arr
 }
-var token = ['sin', 'cos', 'tan', 'pi', '(', ')', 'P', 'C',
-  'asin', 'acos', 'atan', '7', '8', '9', 'int',
-  'cosh', 'acosh', 'ln', '^', 'root', '4', '5', '6', '/', '!',
-  'tanh', 'atanh', 'Mod', '1', '2', '3', '*',
-  'sinh', 'asinh', 'e', 'log', '0', '.', '+', '-', ',', 'Sigma', 'n', 'Pi', 'pow'];
-var show = ['sin', 'cos', 'tan', '&pi;', '(', ')', 'P', 'C',
-  'asin', 'acos', 'atan', '7', '8', '9', 'Int',
-  'cosh', 'acosh', ' ln', '^', 'root', '4', '5', '6', '&divide;', '!',
-  'tanh', 'atanh', ' Mod ', '1', '2', '3', '&times;',
-  'sinh', 'asinh', 'e', ' log', '0', '.', '+', '-', ',', '&Sigma;', 'n', '&Pi;', 'pow'];
-var eva = [math_function.math.sin, math_function.math.cos, math_function.math.tan, 'PI', '(', ')', math_function.math.P, math_function.math.C,
-  math_function.math.asin, math_function.math.acos, math_function.math.atan, '7', '8', '9', Math.floor,
-  math_function.math.cosh, math_function.math.acosh, Math.log, Math.pow, Math.sqrt, '4', '5', '6', math_function.math.div, math_function.math.fact,
-  math_function.math.tanh, math_function.math.atanh, math_function.math.mod, '1', '2', '3', math_function.math.mul,
-  math_function.math.sinh, math_function.math.asinh, 'E', math_function.math.log, '0', '.', math_function.math.add, math_function.math.sub, ',', math_function.math.sigma, 'n', math_function.math.Pi, Math.pow];
+var token = [
+  'sin',
+  'cos',
+  'tan',
+  'pi',
+  '(',
+  ')',
+  'P',
+  'C',
+  ' ',
+  'asin',
+  'acos',
+  'atan',
+  '7',
+  '8',
+  '9',
+  'int',
+  'cosh',
+  'acosh',
+  'ln',
+  '^',
+  'root',
+  '4',
+  '5',
+  '6',
+  '/',
+  '!',
+  'tanh',
+  'atanh',
+  'Mod',
+  '1',
+  '2',
+  '3',
+  '*',
+  'sinh',
+  'asinh',
+  'e',
+  'log',
+  '0',
+  '.',
+  '+',
+  '-',
+  ',',
+  'Sigma',
+  'n',
+  'Pi',
+  'pow'
+];
+var show = [
+  'sin',
+  'cos',
+  'tan',
+  '&pi;',
+  '(',
+  ')',
+  'P',
+  'C',
+  ' ',
+  'asin',
+  'acos',
+  'atan',
+  '7',
+  '8',
+  '9',
+  'Int',
+  'cosh',
+  'acosh',
+  ' ln',
+  '^',
+  'root',
+  '4',
+  '5',
+  '6',
+  '&divide;',
+  '!',
+  'tanh',
+  'atanh',
+  ' Mod ',
+  '1',
+  '2',
+  '3',
+  '&times;',
+  'sinh',
+  'asinh',
+  'e',
+  ' log',
+  '0',
+  '.',
+  '+',
+  '-',
+  ',',
+  '&Sigma;',
+  'n',
+  '&Pi;',
+  'pow'
+];
+var eva = [
+  math_function.math.sin,
+  math_function.math.cos,
+  math_function.math.tan,
+  'PI',
+  '(',
+  ')',
+  math_function.math.P,
+  math_function.math.C,
+  ' '.anchor,
+  math_function.math.asin,
+  math_function.math.acos,
+  math_function.math.atan,
+  '7',
+  '8',
+  '9',
+  Math.floor,
+  math_function.math.cosh,
+  math_function.math.acosh,
+  Math.log,
+  Math.pow,
+  Math.sqrt,
+  '4',
+  '5',
+  '6',
+  math_function.math.div,
+  math_function.math.fact,
+  math_function.math.tanh,
+  math_function.math.atanh,
+  math_function.math.mod,
+  '1',
+  '2',
+  '3',
+  math_function.math.mul,
+  math_function.math.sinh,
+  math_function.math.asinh,
+  'E',
+  math_function.math.log,
+  '0',
+  '.',
+  math_function.math.add,
+  math_function.math.sub,
+  ',',
+  math_function.math.sigma,
+  'n',
+  math_function.math.Pi,
+  Math.pow
+];
 var preced = {
   0: 11,
   1: 0,
@@ -203,13 +332,13 @@ var preced = {
   10: 10,
   11: 0,
   12: 11,
-  13: 0
+  13: 0,
+  14: -1 // will be filtered after lexer
 }; // stores precedence by types
-var type = [0, 0, 0, 3, 4, 5, 10, 10,
-  0, 0, 0, 1, 1, 1, 0,
-  0, 0, 0, 10, 0, 1, 1, 1, 2, 7,
-  0, 0, 2, 1, 1, 1, 2,
-  0, 0, 3, 0, 1, 6, 9, 9, 11, 12, 13, 12, 8];
+var type = [
+  0, 0, 0, 3, 4, 5, 10, 10, 14, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 10, 0, 1, 1, 1, 2, 7, 0, 0, 2, 1, 1,
+  1, 2, 0, 0, 3, 0, 1, 6, 9, 9, 11, 12, 13, 12, 8
+];
 /*
 0 : function with syntax function_name(Maths_exp)
 1 : numbers
@@ -223,7 +352,7 @@ var type = [0, 0, 0, 3, 4, 5, 10, 10,
 9 : binary operator like +,-
 10: binary operator like P C or ^
 11: ,
-12: function with , seperated three parameters
+12: function with , seperated three parameters and third parameter is a string that will be mexp string
 13: variable of Sigma function
 */
 var type0 = {
@@ -235,7 +364,8 @@ var type0 = {
   8: true,
   9: true,
   12: true,
-  13: true
+  13: true,
+  14: true
 }; // type2:true,type4:true,type9:true,type11:true,type21:true,type22
 var type1 = {
   0: true,
@@ -277,7 +407,33 @@ var type6 = {
 };
 var newAr = [
   [],
-  ['1', '2', '3', '7', '8', '9', '4', '5', '6', '+', '-', '*', '/', '(', ')', '^', '!', 'P', 'C', 'e', '0', '.', ',', 'n'],
+  [
+    '1',
+    '2',
+    '3',
+    '7',
+    '8',
+    '9',
+    '4',
+    '5',
+    '6',
+    '+',
+    '-',
+    '*',
+    '/',
+    '(',
+    ')',
+    '^',
+    '!',
+    'P',
+    'C',
+    'e',
+    '0',
+    '.',
+    ',',
+    'n',
+    ' '
+  ],
   ['pi', 'ln', 'Pi'],
   ['sin', 'cos', 'tan', 'Del', 'int', 'Mod', 'log', 'pow'],
   ['asin', 'acos', 'atan', 'cosh', 'root', 'tanh', 'sinh'],
@@ -298,14 +454,11 @@ math_function.addToken = function (tokens) {
     var temp = -1;
 
     // newAr is a specially designed data structure index of 1d array = length of tokens
-
-    if (x < newAr.length) { // match to check if token is really huge and not existing
-    // if not checked it will break in next line as undefined index
-      for (var y = 0; y < newAr[x].length; y++) {
-        if (tokens[i].token === newAr[x][y]) {
-          temp = token.indexOf(newAr[x][y]);
-          break
-        }
+    newAr[x] = newAr[x] || [];
+    for (var y = 0; y < newAr[x].length; y++) {
+      if (tokens[i].token === newAr[x][y]) {
+        temp = token.indexOf(newAr[x][y]);
+        break
       }
     }
     if (temp === -1) {
@@ -318,6 +471,7 @@ math_function.addToken = function (tokens) {
       eva.push(tokens[i].value);
       show.push(tokens[i].show);
     } else {
+      // overwrite
       token[temp] = tokens[i].token;
       type[temp] = tokens[i].type;
       eva[temp] = tokens[i].value;
@@ -325,7 +479,49 @@ math_function.addToken = function (tokens) {
     }
   }
 };
+
+function tokenize (string) {
+  var nodes = [];
+  var length = string.length;
+  var key, x, y;
+  for (var i = 0; i < length; i++) {
+    if (i < length - 1 && string[i] === ' ' && string[i + 1] === ' ') {
+      continue
+    }
+    key = '';
+    for (
+      x = string.length - i > newAr.length - 2 ? newAr.length - 1 : string.length - i;
+      x > 0;
+      x--
+    ) {
+      if (newAr[x] === undefined) continue
+      for (y = 0; y < newAr[x].length; y++) {
+        if (match(string, newAr[x][y], i, x)) {
+          key = newAr[x][y];
+          y = newAr[x].length;
+          x = 0;
+        }
+      }
+    }
+    i += key.length - 1;
+    if (key === '') {
+      throw new math_function.Exception("Can't understand after " + string.slice(i))
+    }
+    var index = token.indexOf(key);
+    nodes.push({
+      index: index,
+      token: key,
+      type: type[index],
+      eval: eva[index],
+      precedence: preced[type[index]],
+      show: show[index]
+    });
+  }
+  return nodes
+}
+
 math_function.lex = function (inp, tokens) {
+
   var changeSignObj = {
     value: math_function.math.changeSign,
     type: 0,
@@ -345,50 +541,43 @@ math_function.lex = function (inp, tokens) {
     show: '('
   };
   var str = [openingParObj];
+
   var ptc = []; // Parenthesis to close at the beginning is after one token
   var inpStr = inp;
-  var key;
   var allowed = type0;
   var bracToClose = 0;
   var asterick = empty;
   var prevKey = '';
-  var i, x, y;
+  var i;
   if (typeof tokens !== 'undefined') {
     math_function.addToken(tokens);
   }
   var obj = {};
-  for (i = 0; i < inpStr.length; i++) {
-    if (inpStr[i] === ' ') {
+  var nodes = tokenize(inpStr);
+  for (i = 0; i < nodes.length; i++) {
+    var node = nodes[i];
+    if (node.type === 14) {
+      if (
+        i > 0 &&
+        i < nodes.length - 1 &&
+        nodes[i + 1].type === 1 &&
+        (nodes[i - 1].type === 1 || nodes[i - 1].type === 6)
+      ) { throw new math_function.Exception('Unexpected Space') }
       continue
     }
-    key = '';
-    for (x = (inpStr.length - i > (newAr.length - 2) ? newAr.length - 1 : inpStr.length - i); x > 0; x--) {
-      if (newAr[x] === undefined) continue;
-      for (y = 0; y < newAr[x].length; y++) {
-        if (match(inpStr, newAr[x][y], i, x)) {
-          key = newAr[x][y];
-          y = newAr[x].length;
-          x = 0;
-        }
-      }
-    }
-    i += key.length - 1;
-    if (key === '') {
-      throw (new math_function.Exception('Can\'t understand after ' + inpStr.slice(i)))
-    }
-    var index = token.indexOf(key);
-    var cToken = key;
-    var cType = type[index];
-    var cEv = eva[index];
-    var cPre = preced[cType];
-    var cShow = show[index];
+    var cToken = node.token;
+    var cType = node.type;
+    var cEv = node.eval;
+    var cPre = node.precedence;
+    var cShow = node.show;
     var pre = str[str.length - 1];
     var j;
-    for (j = ptc.length; j--;) { // loop over ptc
+    for (j = ptc.length; j--;) {
+      // loop over ptc
       if (ptc[j] === 0) {
         if ([0, 2, 3, 4, 5, 9, 11, 12, 13].indexOf(cType) !== -1) {
           if (allowed[cType] !== true) {
-            throw (new math_function.Exception(key + ' is not allowed after ' + prevKey))
+            throw new math_function.Exception(cToken + ' is not allowed after ' + prevKey)
           }
           str.push(closingParObj);
           allowed = type1;
@@ -398,14 +587,14 @@ math_function.lex = function (inp, tokens) {
       } else break
     }
     if (allowed[cType] !== true) {
-      throw (new math_function.Exception(key + ' is not allowed after ' + prevKey))
+      throw new math_function.Exception(cToken + ' is not allowed after ' + prevKey)
     }
     if (asterick[cType] === true) {
       cType = 2;
       cEv = math_function.math.mul;
       cShow = '&times;';
       cPre = 3;
-      i = i - key.length;
+      i = i - 1;
     }
     obj = {
       value: cEv,
@@ -433,7 +622,8 @@ math_function.lex = function (inp, tokens) {
       asterick = empty;
       inc(ptc, 2);
       str.push(obj);
-    } else if (cType === 3) { // constant
+    } else if (cType === 3) {
+      // constant
       str.push(obj);
       allowed = type1;
       asterick = type3Asterick;
@@ -445,15 +635,16 @@ math_function.lex = function (inp, tokens) {
       str.push(obj);
     } else if (cType === 5) {
       if (!bracToClose) {
-        throw (new math_function.Exception('Closing parenthesis are more than opening one, wait What!!!'))
+        throw new math_function.Exception('Closing parenthesis are more than opening one, wait What!!!')
       }
       bracToClose--;
       allowed = type1;
       asterick = type3Asterick;
       str.push(obj);
+      inc(ptc, 1);
     } else if (cType === 6) {
       if (pre.hasDec) {
-        throw (new math_function.Exception('Two decimals are not allowed in one number'))
+        throw new math_function.Exception('Two decimals are not allowed in one number')
       }
       if (pre.type !== 1) {
         pre = {
@@ -492,8 +683,16 @@ math_function.lex = function (inp, tokens) {
           pre.show = '+';
           inc(ptc, 1);
         }
-      } else if (pre.type !== 5 && pre.type !== 7 && pre.type !== 1 && pre.type !== 3 && pre.type !== 13) { // changesign only when negative is found
-        if (cToken === '-') { // do nothing for + token
+      } else if (
+        pre.type !== 5 &&
+        pre.type !== 7 &&
+        pre.type !== 1 &&
+        pre.type !== 3 &&
+        pre.type !== 13
+      ) {
+        // changesign only when negative is found
+        if (cToken === '-') {
+          // do nothing for + token
           // don't add with the above if statement as that will run the else statement of parent if on Ctoken +
           allowed = type0;
           asterick = empty;
@@ -528,16 +727,17 @@ math_function.lex = function (inp, tokens) {
       str.push(obj);
     }
     inc(ptc, -1);
-    prevKey = key;
+    prevKey = cToken;
   }
-  for (j = ptc.length; j--;) { // loop over ptc
+  for (j = ptc.length; j--;) {
+    // loop over ptc
     if (ptc[j] === 0) {
       str.push(closingParObj);
       inc(ptc, -1).pop();
-    } else break  // if it is not zero so before ptc also cant be zero
+    } else break // if it is not zero so before ptc also cant be zero
   }
   if (allowed[5] !== true) {
-    throw (new math_function.Exception('complete the expression'))
+    throw new math_function.Exception('complete the expression')
   }
   while (bracToClose--) {
     str.push(closingParObj);
@@ -550,51 +750,51 @@ math_function.lex = function (inp, tokens) {
 var lexer = math_function;
 
 lexer.prototype.toPostfix = function () {
-		var post=[],elem,popped,prep,pre,ele;
-    	var stack=[{value:"(",type:4,pre:0}];
-		var arr=this.value;
-		for (var i=1; i < arr.length; i++) {
-			if(arr[i].type===1||arr[i].type===3||arr[i].type===13){	//if token is number,constant,or n(which is also a special constant in our case)
-				if(arr[i].type===1)
-					arr[i].value=Number(arr[i].value);
-				post.push(arr[i]);
-			}
-			else if(arr[i].type===4){
-				stack.push(arr[i]);
-			}
-			else if(arr[i].type===5){
-				while((popped=stack.pop()).type!==4){
-					post.push(popped);
-				}
-			}
-			else if(arr[i].type===11){
-				while((popped=stack.pop()).type!==4){
-					post.push(popped);
-				}
-				stack.push(popped);
-			}
-			else {
-				elem=arr[i];
-				pre=elem.pre;
-				ele=stack[stack.length-1];
-				prep=ele.pre;
-				var flag=ele.value=='Math.pow'&&elem.value=='Math.pow';
-				if(pre>prep)stack.push(elem);
-				else {
-					while(prep>=pre&&!flag||flag&&pre<prep){
-						popped=stack.pop();
-						ele=stack[stack.length-1];
-						post.push(popped);
-						prep=ele.pre;
-						flag=elem.value=='Math.pow'&&ele.value=='Math.pow';
-					}
-					stack.push(elem);
-				}
+	var post = [], elem, popped, prep, pre, ele;
+	var stack = [{ value: "(", type: 4, pre: 0 }];
+	var arr = this.value;
+	for (var i = 1; i < arr.length; i++) {
+		if (arr[i].type === 1 || arr[i].type === 3 || arr[i].type === 13) {	//if token is number,constant,or n(which is also a special constant in our case)
+			if (arr[i].type === 1)
+				arr[i].value = Number(arr[i].value);
+			post.push(arr[i]);
+		}
+		else if (arr[i].type === 4) {
+			stack.push(arr[i]);
+		}
+		else if (arr[i].type === 5) {
+			while ((popped = stack.pop()).type !== 4) {
+				post.push(popped);
 			}
 		}
-		return new lexer(post);
-	};
-    var postfix=lexer;
+		else if (arr[i].type === 11) {
+			while ((popped = stack.pop()).type !== 4) {
+				post.push(popped);
+			}
+			stack.push(popped);
+		}
+		else {
+			elem = arr[i];
+			pre = elem.pre;
+			ele = stack[stack.length - 1];
+			prep = ele.pre;
+			var flag = ele.value == 'Math.pow' && elem.value == 'Math.pow';
+			if (pre > prep) stack.push(elem);
+			else {
+				while (prep >= pre && !flag || flag && pre < prep) {
+					popped = stack.pop();
+					ele = stack[stack.length - 1];
+					post.push(popped);
+					prep = ele.pre;
+					flag = elem.value == 'Math.pow' && ele.value == 'Math.pow';
+				}
+				stack.push(elem);
+			}
+		}
+	}
+	return new lexer(post);
+};
+var postfix = lexer;
 
 postfix.prototype.postfixEval = function (UserDefined) {
 	UserDefined=UserDefined||{};
@@ -648,7 +848,6 @@ postfix.prototype.postfixEval = function (UserDefined) {
 			pop1=stack.pop();
 			pop2=stack.pop();
 			if(typeof pop2.type==="undefined"){
-                console.log(pop2);
 				pop2=pop2.concat(pop1);
 				pop2.push(arr[i]);
 				stack.push(pop2);
@@ -679,7 +878,7 @@ postfix.prototype.postfixEval = function (UserDefined) {
 		}
 	}
 	if (stack.length>1) {
-		throw(new postfix.exception("Uncaught Syntax error"));
+		throw(new postfix.Exception("Uncaught Syntax error"));
 	}
 	return stack[0].value>1000000000000000?"Infinity":parseFloat(stack[0].value.toFixed(15));
 };
@@ -737,7 +936,7 @@ postfix_evaluator.prototype.formulaEval = function () {
 };
 var formula_evaluator=postfix_evaluator;
 
-var prefixes = { context: '+', person: '@', tracker: '#' };
+var prefixes = { context: '+', person: '@', journal: '§', period: '~', tracker: '#', place: '/' };
 /**
  *
  * Get Parsed Value from word
@@ -813,7 +1012,7 @@ function scrub(word) {
  * toToken
  * Creates a payload that can be turned into a
  *
- * @param {String} type tracker,context,person,generic
+ * @param {String} type tracker,context,person,period,journal,generic
  * @param {String} word
  * @param {String} value
  * @param {String} remainder
@@ -893,6 +1092,12 @@ function parseStr(str) {
         else if (firstChar === '@' && word.length > 1) {
             return toToken('person', scrubbed.word.toLowerCase(), parsedValueString.value, scrubbed.remainder, null, parsedValueString.uom);
         }
+        else if (firstChar === '~' && word.length > 1) {
+            return toToken('period', scrubbed.word.toLowerCase(), parsedValueString.value, scrubbed.remainder, null, parsedValueString.uom);
+        }
+        else if (firstChar === '§' && word.length > 1) {
+            return toToken('journal', scrubbed.word.toLowerCase(), parsedValueString.value, scrubbed.remainder, null, parsedValueString.uom);
+        }
         else if (firstChar === '+' && word.length > 1) {
             return toToken('context', scrubbed.word, parsedValueString.value, scrubbed.remainder, null, parsedValueString.uom);
         }
@@ -919,6 +1124,8 @@ function parseStr(str) {
 var remap = {
     tracker: 'trackers',
     person: 'people',
+    journal: 'journals',
+    period: 'periods',
     link: 'links'
 };
 /**
@@ -930,6 +1137,8 @@ function stats(tokens) {
     var map = {
         trackers: {},
         people: {},
+        periods: {},
+        journals: {},
         context: {},
         links: {}
     };
@@ -952,6 +1161,8 @@ function stats(tokens) {
         trackers: [],
         context: [],
         people: [],
+        periods: [],
+        journals: [],
         links: []
     };
     // Loop over the map to do final filtering

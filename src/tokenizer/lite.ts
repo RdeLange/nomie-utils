@@ -2,7 +2,7 @@ import time from '../time/time'
 import { Token, WordPart } from './_interfaces'
 import mathEval from 'math-expression-evaluator'
 
-const prefixes = { context: '+', person: '@', tracker: '#', place: '/' }
+const prefixes = { context: '+', person: '@', journal: '§', period: '~', tracker: '#', place: '/' }
 
 /**
  *
@@ -84,7 +84,7 @@ function scrub(word: string): WordPart {
  * toToken
  * Creates a payload that can be turned into a
  *
- * @param {String} type tracker,context,person,generic
+ * @param {String} type tracker,context,person,period,journal,generic
  * @param {String} word
  * @param {String} value
  * @param {String} remainder
@@ -107,7 +107,7 @@ function toToken(
   return {
     id,
     raw, // Raw word
-    prefix, // #,@,+
+    prefix, // #,@,+,§,~
     type, // type of trackableElement
     value, // value of the tracker
     remainder, //any trailing words
@@ -185,6 +185,24 @@ function parseStr(str: string): any {
         } else if (firstChar === '@' && word.length > 1) {
           return toToken(
             'person',
+            scrubbed.word.toLowerCase(),
+            parsedValueString.value,
+            scrubbed.remainder,
+            null,
+            parsedValueString.uom
+          )
+        } else if (firstChar === '~' && word.length > 1) {
+          return toToken(
+            'period',
+            scrubbed.word.toLowerCase(),
+            parsedValueString.value,
+            scrubbed.remainder,
+            null,
+            parsedValueString.uom
+          )
+        } else if (firstChar === '§' && word.length > 1) {
+          return toToken(
+            'journal',
             scrubbed.word.toLowerCase(),
             parsedValueString.value,
             scrubbed.remainder,

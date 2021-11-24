@@ -4,6 +4,8 @@ import { DeepResults, Token } from './_interfaces'
 const remap = {
   tracker: 'trackers',
   person: 'people',
+  journal: 'journals',
+  period: 'periods',
   link: 'links'
 }
 
@@ -16,6 +18,8 @@ function stats(tokens: Array<Token>): DeepResults {
   const map: any = {
     trackers: {},
     people: {},
+    periods: {},
+    journals: {},
     context: {},
     links: {}
   }
@@ -39,6 +43,8 @@ function stats(tokens: Array<Token>): DeepResults {
     trackers: [],
     context: [],
     people: [],
+    periods: [],
+    journals: [],
     links: []
   }
 

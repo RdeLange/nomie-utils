@@ -1,7 +1,7 @@
 {
-  "name": "nomie-utils",
-  "version": "0.1.12",
-  "description": "Nomie 5 utilities",
+  "name": "nomie-utils-r",
+  "version": "0.1.12r1",
+  "description": "Nomie 5 utilities for r version",
   "main": "build/index.js",
   "module": "build/index.es.js",
   "jsnext:main": "build/index.es.js",

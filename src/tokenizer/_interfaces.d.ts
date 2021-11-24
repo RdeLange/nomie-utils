@@ -1,7 +1,7 @@
 export interface Token {
   id: string
   raw: string // Raw word
-  prefix: string // #,@,+
+  prefix: string // #,@,+,~,§
   type: string // type of trackableElement
   value?: string | number // value of the tracker
   remainder?: string //any trailing words
